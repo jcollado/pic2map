@@ -11,7 +11,7 @@ Pic2Map
 
 Display pictures location in a map
 
-* Free software: BSD license
+* Free software: MIT license
 * Documentation: https://pic2map.readthedocs.org.
 
 Features
