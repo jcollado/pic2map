@@ -5,6 +5,8 @@ import shutil
 import tempfile
 import unittest
 
+import exiftool
+
 from PIL import Image
 
 from pic2map.fs import TreeExplorer
@@ -66,6 +68,18 @@ class TreeExplorerTest(unittest.TestCase):
         """
         picture = Image.new('RGB', (1, 1))
         picture.save(filename, 'JPEG')
+        with exiftool.ExifTool() as tool:
+            output = tool.execute(
+                u'-overwrite_original',
+                u'-gpslatitude=0',
+                u'-gpslatituderef=N',
+                u'-gpslongitude=0',
+                u'-gpslongituderef=E',
+                filename,
+            )
+            self.assertEqual(
+                output,
+                '1 image files updated\n')
         self.picture_filenames.append(filename)
 
     def create_broken_symlink_file(self, filename):
