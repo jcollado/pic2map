@@ -40,7 +40,12 @@ class TreeExplorer(object):
         return paths
 
     def _explore(self):
-        """Walk from base directory and return files that match pattern."""
+        """Walk from base directory and return files that match pattern.
+
+        :returns: Image files found under directory
+        :rtype: list(str)
+
+        """
         paths = []
         for (dirpath, _dirnames, filenames) in os.walk(self.directory):
             logger.debug('Exploring %s...', dirpath)
