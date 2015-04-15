@@ -81,7 +81,7 @@ class TreeExplorerTest(unittest.TestCase):
             os.symlink(source_file.name, filename)
 
     def test_paths(self):
-        """SQLite database files are found under the given path."""
+        """Picture files are found under the given directory."""
         metadata = {
             'a': 'text',
             'b': 'picture',
