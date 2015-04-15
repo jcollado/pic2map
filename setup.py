@@ -17,6 +17,7 @@ with open('HISTORY.rst') as history_file:
 requirements = [
     'PyExifTool',
     'python-magic',
+    'voluptuous',
 ]
 
 test_requirements = [

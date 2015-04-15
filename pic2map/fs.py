@@ -7,16 +7,37 @@ import os
 import exiftool
 import magic
 
+from voluptuous import (
+    All,
+    Any,
+    Invalid,
+    Length,
+    Required,
+    Schema,
+)
+
 logger = logging.getLogger(__name__)
 
 GPS_TAGS = [
-    'EXIF:GPSDatestamp',
+    'EXIF:GPSDateStamp',
     'EXIF:GPSLatitude',
     'EXIF:GPSLatitudeRef',
     'EXIF:GPSLongitude',
     'EXIF:GPSLongitudeRef',
-    'EXIF:GPSTimestamp',
+    'EXIF:GPSTimeStamp',
 ]
+
+character = All(unicode, Length(min=1, max=1))
+
+GPS_SCHEMA = Schema({
+    Required('EXIF:GPSLatitude'): Any(int, float),
+    Required('EXIF:GPSLatitudeRef'): character,
+    Required('EXIF:GPSLongitude'): Any(int, float),
+    Required('EXIF:GPSLongitudeRef'): character,
+    Required('SourceFile'): unicode,
+    'EXIF:GPSDateStamp': unicode,
+    'EXIF:GPSTimeStamp': unicode,
+})
 
 
 class TreeExplorer(object):
@@ -40,14 +61,16 @@ class TreeExplorer(object):
 
         """
         paths = self._explore()
-        logger.debug(
-            '%d picture files found under %s:\n%s',
+        logger.info(
+            '%d picture files found under %s',
             len(paths),
-            self.directory,
-            '\n'.join(os.path.relpath(path, self.directory)
-                      for path in paths))
+            self.directory)
 
-        valid_paths = filter_files_with_gps_data(paths)
+        valid_paths = filter_files_with_gps_metadata(paths)
+        logger.info(
+            '%d picture files with GPS metadata found under %s',
+            len(valid_paths),
+            self.directory)
 
         return valid_paths
 
@@ -77,7 +100,26 @@ class TreeExplorer(object):
         return paths
 
 
-def filter_files_with_gps_data(paths):
+def validate_gps_metadata(exif_metadata):
+    """Validate GPS metadata using a schema.
+
+    :param exif_metadata: Metadata to be validated
+    :type exif_metadata: dict(str)
+    :returns: Whether GPS metadata was found or not
+    :rtype: bool
+
+    """
+    try:
+        GPS_SCHEMA(exif_metadata)
+    except Invalid as exception:
+        logging.debug(
+            'No GPS metadata found:\n%s\n%s', exif_metadata, exception)
+        return False
+
+    return True
+
+
+def filter_files_with_gps_metadata(paths):
     """Filter paths that don't have GPS data.
 
     :param paths: Picture filenames to be filtered.
@@ -95,7 +137,7 @@ def filter_files_with_gps_data(paths):
     valid_paths = [
         path
         for path, exif_metadata in zip(paths, exif_metadata_paths)
-        # TBD: Validate metadata
+        if validate_gps_metadata(exif_metadata)
     ]
 
     return valid_paths

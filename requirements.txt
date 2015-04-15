@@ -1,3 +1,4 @@
 git+https://github.com/smarnach/pyexiftool.git#egg=PyExifTool==0.1
 python-magic==0.4.6
+voluptuous==0.8.7
 wheel==0.23.0
