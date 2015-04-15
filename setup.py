@@ -20,6 +20,7 @@ requirements = [
 
 test_requirements = [
     'coverage',
+    'pillow',
 ]
 
 setup(
