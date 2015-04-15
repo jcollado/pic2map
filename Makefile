@@ -47,7 +47,7 @@ coverage:
 	coverage run --source pic2map setup.py test
 	coverage report -m
 	coverage html
-	open htmlcov/index.html
+	xdg-open htmlcov/index.html
 
 docs:
 	rm -f docs/pic2map.rst
