@@ -50,6 +50,27 @@ class MainTests(unittest.TestCase):
         self.logging_patcher.stop()
 
 
+class CommandFunctionTests(unittest.TestCase):
+
+    """Command function test cases."""
+
+    def setUp(self):
+        """Patch elasticsearch client."""
+        self.patcher = patch('pic2map.cli.TreeExplorer')
+        self.tree_explorer_cls = self.patcher.start()
+
+    def test_add(self):
+        """Add command function."""
+        directory = 'some directory'
+        args = argparse.Namespace(directory=directory)
+        add(args)
+        self.tree_explorer_cls.assert_called_once_with(directory)
+
+    def tearDown(self):
+        """Undo the patching."""
+        self.patcher.stop()
+
+
 class ValidDirectoryTest(unittest.TestCase):
 
     """Valid directory test cases."""
