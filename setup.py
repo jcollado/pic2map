@@ -40,6 +40,11 @@ setup(
     license="BSD",
     zip_safe=False,
     keywords='picture map location',
+    entry_points={
+        'console_scripts': [
+            'pic2map = pic2map.cli:main',
+        ]
+    },
     classifiers=[
         'Development Status :: 2 - Pre-Alpha',
         'Intended Audience :: Developers',
