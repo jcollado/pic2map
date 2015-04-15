@@ -34,8 +34,8 @@ class TreeExplorer(object):
             '%d picture files found under %s:\n%s',
             len(paths),
             self.directory,
-            '\n'.join(os.path.relpath(db_path, self.directory)
-                      for db_path in paths))
+            '\n'.join(os.path.relpath(path, self.directory)
+                      for path in paths))
 
         return paths
 
