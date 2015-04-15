@@ -4,9 +4,19 @@
 import logging
 import os
 
+import exiftool
 import magic
 
 logger = logging.getLogger(__name__)
+
+GPS_TAGS = [
+    'EXIF:GPSDatestamp',
+    'EXIF:GPSLatitude',
+    'EXIF:GPSLatitudeRef',
+    'EXIF:GPSLongitude',
+    'EXIF:GPSLongitudeRef',
+    'EXIF:GPSTimestamp',
+]
 
 
 class TreeExplorer(object):
@@ -37,7 +47,9 @@ class TreeExplorer(object):
             '\n'.join(os.path.relpath(path, self.directory)
                       for path in paths))
 
-        return paths
+        valid_paths = filter_files_with_gps_data(paths)
+
+        return valid_paths
 
     def _explore(self):
         """Walk from base directory and return files that match pattern.
@@ -63,3 +75,27 @@ class TreeExplorer(object):
                     paths.append(path)
 
         return paths
+
+
+def filter_files_with_gps_data(paths):
+    """Filter paths that don't have GPS data.
+
+    :param paths: Picture filenames to be filtered.
+    :type paths: list(str)
+    :returns: Picture files with GPS data
+    :rtype: dict(str)
+
+    """
+    with exiftool.ExifTool() as tool:
+        exif_metadata_paths = tool.get_tags_batch(
+            GPS_TAGS,
+            paths,
+        )
+
+    valid_paths = [
+        path
+        for path, exif_metadata in zip(paths, exif_metadata_paths)
+        # TBD: Validate metadata
+    ]
+
+    return valid_paths
