@@ -6,6 +6,8 @@ import logging
 import os
 import sys
 
+from pic2map.fs import TreeExplorer
+
 logger = logging.getLogger(__name__)
 
 
@@ -19,6 +21,8 @@ def main(argv):
 def add(args):
     """Add images from a directory to the map."""
     logger.info('Adding image files from %r...', args.directory)
+    tree_explorer = TreeExplorer(args.directory)
+    tree_explorer.paths()
 
 
 def valid_directory(path):
