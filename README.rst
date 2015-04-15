@@ -16,7 +16,7 @@ Pic2Map
 .. image:: https://img.shields.io/travis/jcollado/pic2map.svg
     :target: https://travis-ci.org/jcollado/pic2map
 
-.. image:: https://coveralls.io/repos/jcollado/pic2map.svg
+.. image:: https://coveralls.io/repos/jcollado/pic2map/badge.svg
     :target: https://coveralls.io/r/jcollado/pic2map
 
 
