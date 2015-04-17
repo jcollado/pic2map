@@ -1,12 +1,16 @@
 # -*- coding: utf-8 -*-
 """Test database functionality."""
 
+import os
+import shutil
 import sqlite3
 import tempfile
 import unittest
 
 from contextlib import closing
 from datetime import datetime
+
+from mock import patch
 
 from sqlalchemy.exc import NoSuchTableError
 from sqlalchemy.types import (
@@ -17,6 +21,7 @@ from sqlalchemy.types import (
 
 from pic2map.db import (
     Database,
+    LocationDB,
     transform_metadata_to_row,
 )
 
@@ -80,6 +85,71 @@ class DatabaseTest(unittest.TestCase):
 
         # Connection is closed outside the context
         self.assertTrue(database.connection.closed)
+
+
+class LocationDBTest(unittest.TestCase):
+
+    """Location database tests."""
+
+    def setUp(self):
+        """Create temporary directory."""
+        self.directory = tempfile.mkdtemp()
+
+    def tearDown(self):
+        """Remove temporary directory."""
+        shutil.rmtree(self.directory)
+
+    def test_database_exists(self):
+        """Database not create if exists."""
+        filename = os.path.join(self.directory, 'location.db')
+        with closing(sqlite3.connect(filename)) as connection:
+            with closing(connection.cursor()) as cursor:
+                cursor.execute(
+                    'CREATE TABLE location (column_1 TEXT, column_2 TEXT)')
+
+        with patch('pic2map.db.BaseDirectory') as BaseDirectory:
+            BaseDirectory.save_data_path.return_value = (
+                os.path.dirname(filename))
+            location_db = LocationDB()
+            self.assertListEqual(
+                location_db.location_table.columns.keys(),
+                ['column_1', 'column_2'],
+            )
+
+    def test_create_database(self):
+        """Create database file."""
+        with patch('pic2map.db.BaseDirectory') as BaseDirectory:
+            BaseDirectory.save_data_path.return_value = self.directory
+            LocationDB()
+            filename = os.path.join(self.directory, 'location.db')
+            self.assertTrue(os.path.isfile(filename))
+
+    def test_insert(self):
+        """Insert records in database."""
+        rows = [
+            {
+                'filename': 'a.jpg',
+                'latitude': 1.2,
+                'longitude': 2.1,
+                'datetime': datetime(2015, 1, 1, 12, 34, 56)
+            },
+            {
+                'filename': 'b.jpg',
+                'latitude': 3.4,
+                'longitude': 4.3,
+                'datetime': datetime(2015, 1, 1, 12, 34, 56)
+            },
+        ]
+        with patch('pic2map.db.BaseDirectory') as BaseDirectory:
+            BaseDirectory.save_data_path.return_value = self.directory
+            with LocationDB() as location_db:
+                location_db.insert(rows)
+
+            filename = os.path.join(self.directory, 'location.db')
+            with closing(sqlite3.connect(filename)) as connection:
+                with closing(connection.cursor()) as cursor:
+                    result = cursor.execute('SELECT COUNT(*) FROM location')
+                    self.assertListEqual(result.fetchall(), [(2,)])
 
 
 class TransformMetadataToRowTest(unittest.TestCase):
