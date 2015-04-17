@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 """Location database."""
 
+import datetime
 import logging
 import os
 
@@ -105,3 +106,36 @@ class LocationDB(Database):
                 Column('timestamp', DateTime),
             )
             location_table.create()
+
+
+def transform_metadata_to_row(metadata):
+    """Transform GPS metadata in database rows.
+
+    :param metadata: GPS metadata as returned by exiftool
+    :type metadata: dict(str)
+    :returns: Database row
+    :rtype: dict(str)
+
+    """
+    new_metadata = {
+        'filename': metadata['SourceFile'],
+        'latitude': metadata['EXIF:GPSLatitude'],
+        'longitude': metadata['EXIF:GPSLongitude'],
+    }
+
+    if metadata['EXIF:GPSLatitudeRef'] == u'S':
+        new_metadata['latitude'] *= -1
+    if metadata['EXIF:GPSLongitudeRef'] == u'W':
+        new_metadata['longitude'] *= -1
+
+    if ('EXIF:GPSDateStamp' in metadata and
+            'EXIF:GPSTimeStamp' in metadata):
+        datetime_str = u'{}#{}'.format(
+            metadata['EXIF:GPSDateStamp'],
+            metadata['EXIF:GPSTimeStamp'],
+        )
+
+        new_metadata['datetime'] = datetime.datetime.strptime(
+            datetime_str, u'%Y:%m:%d#%H:%M:%S')
+
+    return new_metadata
