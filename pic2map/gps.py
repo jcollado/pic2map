@@ -58,25 +58,22 @@ def validate_gps_metadata(exif_metadata):
     return True
 
 
-def filter_files_with_gps_metadata(paths):
-    """Filter paths that don't have GPS data.
+def filter_gps_metadata(paths):
+    """Filter out metadata records that don't have GPS information.
 
-    :param paths: Picture filenames to be filtered.
+    :param paths: Picture filenames to get metadata from
     :type paths: list(str)
     :returns: Picture files with GPS data
-    :rtype: dict(str)
+    :rtype: list(dict(str))
 
     """
     with exiftool.ExifTool() as tool:
-        exif_metadata_paths = tool.get_tags_batch(
-            TAGS,
-            paths,
-        )
+        metadata_records = tool.get_tags_batch(TAGS, paths)
 
-    valid_paths = [
-        path
-        for path, exif_metadata in zip(paths, exif_metadata_paths)
-        if validate_gps_metadata(exif_metadata)
+    gps_metadata_records = [
+        metadata_record
+        for metadata_record in metadata_records
+        if validate_gps_metadata(metadata_record)
     ]
 
-    return valid_paths
+    return gps_metadata_records

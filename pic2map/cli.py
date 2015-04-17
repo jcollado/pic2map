@@ -8,6 +8,8 @@ import sys
 
 from pic2map.db import LocationDB
 from pic2map.fs import TreeExplorer
+from pic2map.gps import filter_gps_metadata
+
 
 logger = logging.getLogger(__name__)
 
@@ -23,8 +25,13 @@ def add(args):
     """Add images from a directory to the map."""
     logger.info('Adding image files from %r...', args.directory)
     tree_explorer = TreeExplorer(args.directory)
-    tree_explorer.paths()
-    database = LocationDB()
+    paths = tree_explorer.paths()
+
+    gps_metadata_records = filter_gps_metadata(paths)
+    logger.info(
+        '%d picture files with GPS metadata found under %s',
+        len(gps_metadata_records),
+        args.directory)
 
 
 def valid_directory(path):
