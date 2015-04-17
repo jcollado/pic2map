@@ -2,12 +2,14 @@
 """Location database."""
 
 import logging
+import os
 
 from sqlalchemy import (
     MetaData,
     Table,
     create_engine,
 )
+from xdg import BaseDirectory
 
 logger = logging.getLogger(__name__)
 
@@ -69,3 +71,21 @@ class Database(object):
         if table is None:
             table = Table(table_name, self.metadata, autoload=True)
         return table
+
+
+class LocationDB(Database):
+
+    """Location database.
+
+    Store location information from picture files into a sqlite database.
+
+    """
+
+    def __init__(self):
+        """Create database if needed."""
+        base_directory = BaseDirectory.save_data_path('pic2map')
+        db_filename = os.path.join(base_directory, 'location.db')
+        Database.__init__(self, db_filename)
+
+        if not os.path.isfile(db_filename):
+            logger.debug('Creating location database %r...', db_filename)

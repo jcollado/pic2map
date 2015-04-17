@@ -18,6 +18,7 @@ requirements = [
     'PyExifTool',
     'SQLAlchemy',
     'python-magic',
+    'pyxdg',
     'voluptuous',
 ]
 
