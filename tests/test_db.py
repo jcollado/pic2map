@@ -6,6 +6,7 @@ import tempfile
 import unittest
 
 from contextlib import closing
+from datetime import datetime
 
 from sqlalchemy.exc import NoSuchTableError
 from sqlalchemy.types import (
@@ -14,7 +15,11 @@ from sqlalchemy.types import (
 )
 
 
-from pic2map.db import Database
+from pic2map.db import (
+    Database,
+    transform_metadata_to_row,
+)
+
 
 class DatabaseTest(unittest.TestCase):
 
@@ -75,3 +80,68 @@ class DatabaseTest(unittest.TestCase):
 
         # Connection is closed outside the context
         self.assertTrue(database.connection.closed)
+
+
+class TransformMetadataToRowTest(unittest.TestCase):
+
+    """EXIF metadata to database row transformation tests."""
+
+    def test_transform_metadata(self):
+        """Transform metadata to row."""
+        metadata = {
+            'SourceFile': 'a.jpg',
+            'EXIF:GPSLatitude': 1.2,
+            'EXIF:GPSLatitudeRef': 'N',
+            'EXIF:GPSLongitude': 2.1,
+            'EXIF:GPSLongitudeRef': 'E',
+            'EXIF:GPSDateStamp': '2015:01:01',
+            'EXIF:GPSTimeStamp': '12:34:56',
+        }
+        expected_row = {
+            'filename': 'a.jpg',
+            'latitude': 1.2,
+            'longitude': 2.1,
+            'datetime': datetime(2015, 1, 1, 12, 34, 56),
+        }
+
+        row = transform_metadata_to_row(metadata)
+        self.assertEqual(row, expected_row)
+
+    def test_transform_metadata_negative(self):
+        """Transform metadata with negative latitude/longitude to row."""
+        metadata = {
+            'SourceFile': 'a.jpg',
+            'EXIF:GPSLatitude': 1.2,
+            'EXIF:GPSLatitudeRef': 'S',
+            'EXIF:GPSLongitude': 2.1,
+            'EXIF:GPSLongitudeRef': 'W',
+            'EXIF:GPSDateStamp': '2015:01:01',
+            'EXIF:GPSTimeStamp': '12:34:56',
+        }
+        expected_row = {
+            'filename': 'a.jpg',
+            'latitude': -1.2,
+            'longitude': -2.1,
+            'datetime': datetime(2015, 1, 1, 12, 34, 56),
+        }
+
+        row = transform_metadata_to_row(metadata)
+        self.assertEqual(row, expected_row)
+
+    def test_transform_metadata_no_datetime(self):
+        """Transform metadata to row."""
+        metadata = {
+            'SourceFile': 'a.jpg',
+            'EXIF:GPSLatitude': 1.2,
+            'EXIF:GPSLatitudeRef': 'N',
+            'EXIF:GPSLongitude': 2.1,
+            'EXIF:GPSLongitudeRef': 'E',
+        }
+        expected_row = {
+            'filename': 'a.jpg',
+            'latitude': 1.2,
+            'longitude': 2.1,
+        }
+
+        row = transform_metadata_to_row(metadata)
+        self.assertEqual(row, expected_row)
