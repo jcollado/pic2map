@@ -6,8 +6,6 @@ import os
 
 import magic
 
-from pic2map.gps import filter_files_with_gps_metadata
-
 logger = logging.getLogger(__name__)
 
 
@@ -37,13 +35,7 @@ class TreeExplorer(object):
             len(paths),
             self.directory)
 
-        valid_paths = filter_files_with_gps_metadata(paths)
-        logger.info(
-            '%d picture files with GPS metadata found under %s',
-            len(valid_paths),
-            self.directory)
-
-        return valid_paths
+        return paths
 
     def _explore(self):
         """Walk from base directory and return files that match pattern.
