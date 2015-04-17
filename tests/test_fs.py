@@ -5,8 +5,6 @@ import shutil
 import tempfile
 import unittest
 
-import exiftool
-
 from PIL import Image
 
 from pic2map.fs import TreeExplorer

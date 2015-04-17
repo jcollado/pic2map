@@ -10,7 +10,6 @@ from sqlalchemy import (
     MetaData,
     Table,
     create_engine,
-    insert,
 )
 from sqlalchemy.types import (
     DateTime,
