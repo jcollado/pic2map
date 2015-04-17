@@ -8,8 +8,10 @@ import exiftool
 import magic
 
 from voluptuous import (
+    All,
     Any,
     Invalid,
+    Range,
     Required,
     Schema,
 )
@@ -25,10 +27,12 @@ GPS_TAGS = [
     'EXIF:GPSTimeStamp',
 ]
 
+POSITIVE_NUMBER = All(Any(int, float), Range(min=0))
+
 GPS_SCHEMA = Schema({
-    Required('EXIF:GPSLatitude'): Any(int, float),
+    Required('EXIF:GPSLatitude'): POSITIVE_NUMBER,
     Required('EXIF:GPSLatitudeRef'): Any(u'N', u'S'),
-    Required('EXIF:GPSLongitude'): Any(int, float),
+    Required('EXIF:GPSLongitude'): POSITIVE_NUMBER,
     Required('EXIF:GPSLongitudeRef'): Any(u'E', u'W'),
     Required('SourceFile'): unicode,
     'EXIF:GPSDateStamp': unicode,
