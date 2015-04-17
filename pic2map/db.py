@@ -5,9 +5,15 @@ import logging
 import os
 
 from sqlalchemy import (
+    Column,
     MetaData,
     Table,
     create_engine,
+)
+from sqlalchemy.types import (
+    DateTime,
+    Float,
+    String,
 )
 from xdg import BaseDirectory
 
@@ -89,3 +95,13 @@ class LocationDB(Database):
 
         if not os.path.isfile(db_filename):
             logger.debug('Creating location database %r...', db_filename)
+
+            location_table = Table(
+                'location',
+                self.metadata,
+                Column('filename', String),
+                Column('latitude', Float),
+                Column('longitude', Float),
+                Column('timestamp', DateTime),
+            )
+            location_table.create()
