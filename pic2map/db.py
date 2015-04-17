@@ -94,18 +94,20 @@ class LocationDB(Database):
         db_filename = os.path.join(base_directory, 'location.db')
         Database.__init__(self, db_filename)
 
-        if not os.path.isfile(db_filename):
+        if os.path.isfile(db_filename):
+            self.location_table = self['location']
+        else:
             logger.debug('Creating location database %r...', db_filename)
 
-            location_table = Table(
+            self.location_table = Table(
                 'location',
                 self.metadata,
                 Column('filename', String),
                 Column('latitude', Float),
                 Column('longitude', Float),
-                Column('timestamp', DateTime),
+                Column('datetime', DateTime),
             )
-            location_table.create()
+            self.location_table.create()
 
 
 def transform_metadata_to_row(metadata):
