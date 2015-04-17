@@ -11,6 +11,7 @@ from voluptuous import (
     All,
     Any,
     Invalid,
+    Match,
     Range,
     Required,
     Schema,
@@ -35,8 +36,8 @@ GPS_SCHEMA = Schema({
     Required('EXIF:GPSLongitude'): POSITIVE_NUMBER,
     Required('EXIF:GPSLongitudeRef'): Any(u'E', u'W'),
     Required('SourceFile'): unicode,
-    'EXIF:GPSDateStamp': unicode,
-    'EXIF:GPSTimeStamp': unicode,
+    'EXIF:GPSDateStamp': All(unicode, Match(r'\d{4}:\d{2}:\d{2}')),
+    'EXIF:GPSTimeStamp': All(unicode, Match(r'\d{2}:\d{2}:\d{2}')),
 })
 
 
