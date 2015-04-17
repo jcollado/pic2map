@@ -6,7 +6,10 @@ import logging
 import os
 import sys
 
-from pic2map.db import LocationDB
+from pic2map.db import (
+    LocationDB,
+    transform_metadata_to_row,
+)
 from pic2map.fs import TreeExplorer
 from pic2map.gps import filter_gps_metadata
 
@@ -32,6 +35,14 @@ def add(args):
         '%d picture files with GPS metadata found under %s',
         len(gps_metadata_records),
         args.directory)
+
+    location_rows = [
+        transform_metadata_to_row(metadata)
+        for metadata in gps_metadata_records
+    ]
+    if location_rows:
+        with LocationDB() as database:
+            database.insert(location_rows)
 
 
 def valid_directory(path):
