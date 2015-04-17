@@ -10,6 +10,7 @@ from sqlalchemy import (
     MetaData,
     Table,
     create_engine,
+    insert,
 )
 from sqlalchemy.types import (
     DateTime,
@@ -108,6 +109,16 @@ class LocationDB(Database):
                 Column('datetime', DateTime),
             )
             self.location_table.create()
+
+    def insert(self, rows):
+        """Insert rows in location table.
+
+        :param rows: Rows to be inserted in the database
+        :type rows: list(dict(str))
+
+        """
+        insert_query = self.location_table.insert()
+        self.connection.execute(insert_query, rows)
 
 
 def transform_metadata_to_row(metadata):
