@@ -56,19 +56,44 @@ class CommandFunctionTests(unittest.TestCase):
 
     def setUp(self):
         """Patch elasticsearch client."""
-        self.patcher = patch('pic2map.cli.TreeExplorer')
-        self.tree_explorer_cls = self.patcher.start()
+        self.tree_explorer_patcher = patch('pic2map.cli.TreeExplorer')
+        self.tree_explorer_cls = self.tree_explorer_patcher.start()
+
+        self.filter_gps_metadata_patcher = (
+            patch('pic2map.cli.filter_gps_metadata'))
+        self.filter_gps_metadata = self.filter_gps_metadata_patcher.start()
+
+        self.transform_metadata_to_row_patcher = (
+            patch('pic2map.cli.transform_metadata_to_row'))
+        self.transform_metadata_to_row = (
+            self.transform_metadata_to_row_patcher.start())
+
+        self.location_db_patcher = patch('pic2map.cli.LocationDB')
+        self.location_cls = self.location_db_patcher.start()
 
     def test_add(self):
         """Add command function."""
+        tree_explorer = self.tree_explorer_cls()
+        paths = Mock()
+        tree_explorer.paths.return_value = paths
+        metadata_record = Mock()
+        metadata_records = [metadata_record]
+        self.filter_gps_metadata.return_value = metadata_records
+        row = Mock()
+        self.transform_metadata_to_row.return_value = row
+        database = self.location_cls().__enter__()
+
         directory = 'some directory'
         args = argparse.Namespace(directory=directory)
         add(args)
-        self.tree_explorer_cls.assert_called_once_with(directory)
+        self.tree_explorer_cls.assert_called_with(directory)
+        self.filter_gps_metadata.assert_called_once_with(paths)
+        self.transform_metadata_to_row.assert_called_once_with(metadata_record)
+        database.insert.assert_called_with([row])
 
     def tearDown(self):
         """Undo the patching."""
-        self.patcher.stop()
+        self.tree_explorer_patcher.stop()
 
 
 class ValidDirectoryTest(unittest.TestCase):
