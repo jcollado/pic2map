@@ -60,7 +60,7 @@ class TreeExplorerTest(unittest.TestCase):
             file_.write('this is a text file')
 
     def create_picture_file(self, filename):
-        """Create picture file with GPS metdata using the given name.
+        """Create picture file using the given name.
 
         :param filename: Path to the file that should be created
         :type filename: str
@@ -68,29 +68,7 @@ class TreeExplorerTest(unittest.TestCase):
         """
         picture = Image.new('RGB', (1, 1))
         picture.save(filename, 'JPEG')
-        with exiftool.ExifTool() as tool:
-            output = tool.execute(
-                u'-overwrite_original',
-                u'-gpslatitude=0',
-                u'-gpslatituderef=N',
-                u'-gpslongitude=0',
-                u'-gpslongituderef=E',
-                filename,
-            )
-            self.assertEqual(
-                output,
-                '1 image files updated\n')
         self.picture_filenames.append(filename)
-
-    def create_picture_no_gps_file(self, filename):
-        """Create picture file without GPS metdata using the given name.
-
-        :param filename: Path to the file that should be created
-        :type filename: str
-
-        """
-        picture = Image.new('RGB', (1, 1))
-        picture.save(filename, 'JPEG')
 
     def create_broken_symlink_file(self, filename):
         """Create a broken symlink using the given name.
@@ -130,21 +108,6 @@ class TreeExplorerTest(unittest.TestCase):
         """Broken symbolic links are skipped while exploring directory."""
         metadata = {
             'a': 'broken_symlink',
-            'b': 'picture',
-        }
-
-        self.create_directory(self.directory, metadata)
-
-        tree_explorer = TreeExplorer(self.directory)
-        self.assertListEqual(
-            sorted(tree_explorer.paths()),
-            sorted(self.picture_filenames),
-        )
-
-    def test_picture_no_gps_metadata(self):
-        """Picture files without GPS metadata are skipped."""
-        metadata = {
-            'a': 'picture_no_gps',
             'b': 'picture',
         }
 
