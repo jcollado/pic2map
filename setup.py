@@ -39,7 +39,7 @@ setup(
         'pic2map',
     ],
     package_dir={'pic2map': 'pic2map'},
-    package_data={'pic2map': ['html/index.html']},
+    package_data={'pic2map': ['html/*.html', 'html/*.css', 'html/*.js']},
     include_package_data=True,
     install_requires=requirements,
     license="BSD",
