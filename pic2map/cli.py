@@ -25,7 +25,7 @@ def main(argv):
 
 
 def add(args):
-    """Add images from a directory to the map."""
+    """Add pictures metadata from directory to location database."""
     logger.info('Adding image files from %r...', args.directory)
     tree_explorer = TreeExplorer(args.directory)
     paths = tree_explorer.paths()
@@ -98,8 +98,7 @@ def parse_arguments(argv):
 
     subparsers = parser.add_subparsers(help='Subcommands')
 
-    add_parser = subparsers.add_parser(
-        'add', help='Add images')
+    add_parser = subparsers.add_parser('add', help=add.__doc__)
     add_parser.add_argument(
         'directory', type=valid_directory, help='Base directory')
     add_parser.set_defaults(func=add)
