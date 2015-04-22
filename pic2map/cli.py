@@ -47,7 +47,7 @@ def add(args):
             database.insert(location_rows)
 
 
-def serve(args):
+def serve(_args):
     """Run web server."""
     app.run(debug=True)
 
