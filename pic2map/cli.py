@@ -13,6 +13,7 @@ from pic2map.db import (
 )
 from pic2map.fs import TreeExplorer
 from pic2map.gps import filter_gps_metadata
+from pic2map.server.app import app
 
 
 logger = logging.getLogger(__name__)
@@ -50,6 +51,11 @@ def show(args):
     """Display pictures location information in a map."""
     index = os.path.join(os.path.dirname(__file__), 'html', 'index.html')
     subprocess.Popen(['xdg-open', index])
+
+
+def serve(args):
+    """Run web server."""
+    app.run(debug=True)
 
 
 def valid_directory(path):
@@ -112,6 +118,9 @@ def parse_arguments(argv):
 
     show_parser = subparsers.add_parser('show', help=show.__doc__)
     show_parser.set_defaults(func=show)
+
+    serve_parser = subparsers.add_parser('serve', help=serve.__doc__)
+    serve_parser.set_defaults(func=serve)
 
     args = parser.parse_args(argv)
     args.log_level = getattr(logging, args.log_level.upper())
