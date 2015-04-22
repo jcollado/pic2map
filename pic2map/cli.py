@@ -4,6 +4,7 @@
 import argparse
 import logging
 import os
+import subprocess
 import sys
 
 from pic2map.db import (
@@ -43,6 +44,12 @@ def add(args):
     if location_rows:
         with LocationDB() as database:
             database.insert(location_rows)
+
+
+def show(args):
+    """Display pictures location information in a map."""
+    index = os.path.join(os.path.dirname(__file__), 'html', 'index.html')
+    subprocess.Popen(['xdg-open', index])
 
 
 def valid_directory(path):
@@ -102,6 +109,9 @@ def parse_arguments(argv):
     add_parser.add_argument(
         'directory', type=valid_directory, help='Base directory')
     add_parser.set_defaults(func=add)
+
+    show_parser = subparsers.add_parser('show', help=show.__doc__)
+    show_parser.set_defaults(func=show)
 
     args = parser.parse_args(argv)
     args.log_level = getattr(logging, args.log_level.upper())
