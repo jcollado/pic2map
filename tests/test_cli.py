@@ -16,6 +16,7 @@ from pic2map.cli import (
     add,
     main,
     parse_arguments,
+    serve,
     valid_directory,
 )
 
@@ -91,6 +92,13 @@ class CommandFunctionTests(unittest.TestCase):
         self.transform_metadata_to_row.assert_called_once_with(metadata_record)
         database.insert.assert_called_with([row])
 
+    def test_serve(self):
+        """Serve command function."""
+        args = argparse.Namespace()
+        with patch('pic2map.cli.app') as app:
+            serve(args)
+            app.run.assert_called_once_with(debug=True)
+
     def tearDown(self):
         """Undo the patching."""
         self.tree_explorer_patcher.stop()
@@ -140,3 +148,8 @@ class ParseArgumentsTest(unittest.TestCase):
             args = parse_arguments(['add', directory])
             self.assertEqual(args.directory, directory)
             self.assertEqual(args.func, add)
+
+    def test_serve_command(self):
+        """Serve command."""
+        args = parse_arguments(['serve'])
+        self.assertEqual(args.func, serve)
