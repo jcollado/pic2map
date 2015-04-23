@@ -1,9 +1,10 @@
 # -*- coding: utf-8 -*-
 """Location database."""
 
-import datetime
 import logging
 import os
+
+import arrow
 
 from sqlalchemy import (
     Column,
@@ -182,12 +183,14 @@ def transform_metadata_to_row(metadata):
 
     if ('EXIF:GPSDateStamp' in metadata and
             'EXIF:GPSTimeStamp' in metadata):
-        datetime_str = u'{}#{}'.format(
+        datetime_str = u'{} {}'.format(
             metadata['EXIF:GPSDateStamp'],
             metadata['EXIF:GPSTimeStamp'],
         )
 
-        new_metadata['datetime'] = datetime.datetime.strptime(
-            datetime_str, u'%Y:%m:%d#%H:%M:%S')
+        new_metadata['datetime'] = arrow.get(
+            datetime_str,
+            ['YYYY:MM:DD HH:mm:ss.SSS', 'YYYY:MM:DD HH:mm:ss'],
+        ).datetime
 
     return new_metadata

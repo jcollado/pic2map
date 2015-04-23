@@ -1,6 +1,7 @@
 Flask==0.10.1
 SQLAlchemy==0.9.9
 git+https://github.com/smarnach/pyexiftool.git#egg=PyExifTool==0.1
+arrow==0.5.4
 python-magic==0.4.6
 pyxdg==0.25
 voluptuous==0.8.7

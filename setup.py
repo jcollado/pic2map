@@ -18,6 +18,7 @@ requirements = [
     'Flask',
     'PyExifTool',
     'SQLAlchemy',
+    'arrow',
     'python-magic',
     'pyxdg',
     'voluptuous',
