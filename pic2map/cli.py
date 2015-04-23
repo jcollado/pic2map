@@ -4,7 +4,6 @@
 import argparse
 import logging
 import os
-import subprocess
 import sys
 
 from pic2map.db import (
