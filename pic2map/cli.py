@@ -54,6 +54,16 @@ def remove(args):
         database.delete(args.directory)
 
 
+def count(args):
+    """Get number picture files in the database."""
+    logger.info('Getting image files in the database...')
+
+    with LocationDB() as database:
+        file_count = database.count()
+
+    print file_count
+
+
 def serve(_args):
     """Run web server."""
     app.run(debug=True)
@@ -121,6 +131,9 @@ def parse_arguments(argv):
     remove_parser.add_argument(
         'directory', type=valid_directory, help='Base directory')
     remove_parser.set_defaults(func=remove)
+
+    count_parser = subparsers.add_parser('count', help=count.__doc__)
+    count_parser.set_defaults(func=count)
 
     serve_parser = subparsers.add_parser('serve', help=serve.__doc__)
     serve_parser.set_defaults(func=serve)

@@ -147,6 +147,16 @@ class LocationDB(Database):
         result = self.connection.execute(delete_query)
         logger.debug('%d rows deleted', result.rowcount)
 
+    def count(self):
+        """Get number of rows in the database.
+
+        :return: Number of rows
+        :rtype: int
+
+        """
+        select_query = self.location_table.count()
+        result = self.connection.execute(select_query)
+        return result.scalar()
 
 def transform_metadata_to_row(metadata):
     """Transform GPS metadata in database rows.
