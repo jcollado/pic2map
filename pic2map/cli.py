@@ -54,7 +54,7 @@ def remove(args):
         database.delete(args.directory)
 
 
-def count(args):
+def count(_args):
     """Get number picture files in the database."""
     logger.info('Getting image files in the database...')
 
