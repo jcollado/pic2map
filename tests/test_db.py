@@ -10,6 +10,7 @@ import unittest
 from contextlib import closing
 from datetime import datetime
 
+from dateutil.tz import tzutc
 from mock import patch
 
 from sqlalchemy.exc import NoSuchTableError
@@ -226,7 +227,7 @@ class TransformMetadataToRowTest(unittest.TestCase):
             'filename': 'a.jpg',
             'latitude': 1.2,
             'longitude': 2.1,
-            'datetime': datetime(2015, 1, 1, 12, 34, 56),
+            'datetime': datetime(2015, 1, 1, 12, 34, 56, tzinfo=tzutc()),
         }
 
         row = transform_metadata_to_row(metadata)
@@ -247,7 +248,7 @@ class TransformMetadataToRowTest(unittest.TestCase):
             'filename': 'a.jpg',
             'latitude': -1.2,
             'longitude': -2.1,
-            'datetime': datetime(2015, 1, 1, 12, 34, 56),
+            'datetime': datetime(2015, 1, 1, 12, 34, 56, tzinfo=tzutc()),
         }
 
         row = transform_metadata_to_row(metadata)
