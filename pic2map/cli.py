@@ -18,7 +18,7 @@ from pic2map.server.app import app
 logger = logging.getLogger(__name__)
 
 
-def main(argv):
+def main(argv=sys.argv[1:]):
     """Entry point for the pic2map.py script."""
     args = parse_arguments(argv)
     configure_logging(args.log_level)
@@ -143,4 +143,4 @@ def parse_arguments(argv):
     return args
 
 if __name__ == '__main__':
-    main(sys.argv[1:])
+    main()
