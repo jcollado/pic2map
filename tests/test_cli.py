@@ -7,6 +7,8 @@ import os
 import tempfile
 import unittest
 
+from StringIO import StringIO
+
 from mock import (
     MagicMock as Mock,
     patch,
@@ -14,6 +16,7 @@ from mock import (
 
 from pic2map.cli import (
     add,
+    count,
     main,
     parse_arguments,
     remove,
@@ -110,6 +113,19 @@ class CommandFunctionTests(unittest.TestCase):
         database = self.location_cls().__enter__()
         database.delete.assert_called_once_with(directory)
 
+    def test_count(self):
+        """Count command function."""
+        file_count = 10
+
+        database = self.location_cls().__enter__()
+        database.count.return_value = file_count
+
+        args = argparse.Namespace()
+
+        with patch('sys.stdout', new_callable=StringIO) as stdout:
+            count(args)
+            self.assertEqual(stdout.getvalue(), '{}\n'.format(file_count))
+
     def test_serve(self):
         """Serve command function."""
         args = argparse.Namespace()
@@ -171,6 +187,11 @@ class ParseArgumentsTest(unittest.TestCase):
             args = parse_arguments(['remove', directory])
             self.assertEqual(args.directory, directory)
             self.assertEqual(args.func, remove)
+
+    def test_count(self):
+        """Count command."""
+        args = parse_arguments(['count'])
+        self.assertEqual(args.func, count)
 
     def test_serve_command(self):
         """Serve command."""
