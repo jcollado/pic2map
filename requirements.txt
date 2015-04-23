@@ -1,3 +1,4 @@
+Flask==0.10.1
 SQLAlchemy==0.9.9
 git+https://github.com/smarnach/pyexiftool.git#egg=PyExifTool==0.1
 python-magic==0.4.6
