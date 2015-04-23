@@ -94,9 +94,13 @@ class LocationDBTest(unittest.TestCase):
     def setUp(self):
         """Create temporary directory."""
         self.directory = tempfile.mkdtemp()
+        self.base_directory_patcher = patch('pic2map.db.BaseDirectory')
+        base_directory = self.base_directory_patcher.start()
+        base_directory.save_data_path.return_value = self.directory
 
     def tearDown(self):
         """Remove temporary directory."""
+        self.base_directory_patcher.stop()
         shutil.rmtree(self.directory)
 
     def test_database_exists(self):
@@ -107,22 +111,17 @@ class LocationDBTest(unittest.TestCase):
                 cursor.execute(
                     'CREATE TABLE location (column_1 TEXT, column_2 TEXT)')
 
-        with patch('pic2map.db.BaseDirectory') as base_directory:
-            base_directory.save_data_path.return_value = (
-                os.path.dirname(filename))
-            location_db = LocationDB()
-            self.assertListEqual(
-                location_db.location_table.columns.keys(),
-                ['column_1', 'column_2'],
-            )
+        location_db = LocationDB()
+        self.assertListEqual(
+            location_db.location_table.columns.keys(),
+            ['column_1', 'column_2'],
+        )
 
     def test_create_database(self):
         """Create database file."""
-        with patch('pic2map.db.BaseDirectory') as base_directory:
-            base_directory.save_data_path.return_value = self.directory
-            LocationDB()
-            filename = os.path.join(self.directory, 'location.db')
-            self.assertTrue(os.path.isfile(filename))
+        LocationDB()
+        filename = os.path.join(self.directory, 'location.db')
+        self.assertTrue(os.path.isfile(filename))
 
     def test_insert(self):
         """Insert records in database."""
@@ -140,16 +139,14 @@ class LocationDBTest(unittest.TestCase):
                 'datetime': datetime(2015, 1, 1, 12, 34, 56)
             },
         ]
-        with patch('pic2map.db.BaseDirectory') as base_directory:
-            base_directory.save_data_path.return_value = self.directory
-            with LocationDB() as location_db:
-                location_db.insert(rows)
+        with LocationDB() as location_db:
+            location_db.insert(rows)
 
-            filename = os.path.join(self.directory, 'location.db')
-            with closing(sqlite3.connect(filename)) as connection:
-                with closing(connection.cursor()) as cursor:
-                    result = cursor.execute('SELECT COUNT(*) FROM location')
-                    self.assertListEqual(result.fetchall(), [(2,)])
+        filename = os.path.join(self.directory, 'location.db')
+        with closing(sqlite3.connect(filename)) as connection:
+            with closing(connection.cursor()) as cursor:
+                result = cursor.execute('SELECT COUNT(*) FROM location')
+                self.assertListEqual(result.fetchall(), [(2,)])
 
     def test_select_all(self):
         """Select all rows from location table."""
@@ -162,14 +159,12 @@ class LocationDBTest(unittest.TestCase):
                     'INSERT INTO location VALUES ("Hello world!")')
             connection.commit()
 
-        with patch('pic2map.db.BaseDirectory') as base_directory:
-            base_directory.save_data_path.return_value = self.directory
-            with LocationDB() as location_db:
-                result = location_db.select_all()
-                rows = result.fetchall()
-                self.assertEqual(len(rows), 1)
-                row = rows[0]
-                self.assertSequenceEqual(row, (u'Hello world!',))
+        with LocationDB() as location_db:
+            result = location_db.select_all()
+            rows = result.fetchall()
+            self.assertEqual(len(rows), 1)
+            row = rows[0]
+            self.assertSequenceEqual(row, (u'Hello world!',))
 
     def test_remove(self):
         """Delete rows for files under a given directory."""
@@ -188,11 +183,9 @@ class LocationDBTest(unittest.TestCase):
                             .format(directory, index))
             connection.commit()
 
-        with patch('pic2map.db.BaseDirectory') as base_directory:
-            base_directory.save_data_path.return_value = self.directory
-            with LocationDB() as location_db:
-                result = location_db.delete('a')
-                self.assertEqual(result.rowcount, file_count)
+        with LocationDB() as location_db:
+            result = location_db.delete('a')
+            self.assertEqual(result.rowcount, file_count)
 
     def test_count(self):
         """Count rows in database."""
@@ -209,11 +202,9 @@ class LocationDBTest(unittest.TestCase):
                         'INSERT INTO location VALUES ("{}.jpg")'.format(index))
             connection.commit()
 
-        with patch('pic2map.db.BaseDirectory') as base_directory:
-            base_directory.save_data_path.return_value = self.directory
-            with LocationDB() as location_db:
-                result = location_db.count()
-                self.assertEqual(result, file_count)
+        with LocationDB() as location_db:
+            result = location_db.count()
+            self.assertEqual(result, file_count)
 
 
 class TransformMetadataToRowTest(unittest.TestCase):
