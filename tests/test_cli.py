@@ -16,6 +16,7 @@ from pic2map.cli import (
     add,
     main,
     parse_arguments,
+    remove,
     serve,
     valid_directory,
 )
@@ -101,6 +102,14 @@ class CommandFunctionTests(unittest.TestCase):
         self.transform_metadata_to_row.assert_called_once_with(metadata_record)
         database.insert.assert_called_with([row])
 
+    def test_remove(self):
+        """Remove command function."""
+        directory = 'some directory'
+        args = argparse.Namespace(directory=directory)
+        remove(args)
+        database = self.location_cls().__enter__()
+        database.delete.assert_called_once_with(directory)
+
     def test_serve(self):
         """Serve command function."""
         args = argparse.Namespace()
@@ -153,6 +162,15 @@ class ParseArgumentsTest(unittest.TestCase):
             args = parse_arguments(['add', directory])
             self.assertEqual(args.directory, directory)
             self.assertEqual(args.func, add)
+
+    def test_remove(self):
+        """Remove command."""
+        directory = 'some directory'
+        with patch('pic2map.cli.valid_directory') as valid_directory_func:
+            valid_directory_func.return_value = directory
+            args = parse_arguments(['remove', directory])
+            self.assertEqual(args.directory, directory)
+            self.assertEqual(args.func, remove)
 
     def test_serve_command(self):
         """Serve command."""
