@@ -132,6 +132,21 @@ class LocationDB(Database):
         result = self.connection.execute(select_query)
         return result
 
+    def delete(self, directory):
+        """Delete rows with a filename under a given directory.
+
+        :param directory: Directory to be used as prefix in the delete query
+        :type directory: str
+
+        """
+        table = self.location_table
+        delete_query = (
+            table.delete()
+            .where(table.c.filename.startswith(directory))
+        )
+        result = self.connection.execute(delete_query)
+        logger.debug('%d rows deleted', result.rowcount)
+
 
 def transform_metadata_to_row(metadata):
     """Transform GPS metadata in database rows.
