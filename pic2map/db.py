@@ -119,7 +119,8 @@ class LocationDB(Database):
 
         """
         insert_query = self.location_table.insert()
-        self.connection.execute(insert_query, rows)
+        result = self.connection.execute(insert_query, rows)
+        logger.debug('%d rows inserted', result.rowcount)
 
     def select_all(self):
         """Get all rows from the location table.
