@@ -151,6 +151,28 @@ class LocationDBTest(unittest.TestCase):
                     result = cursor.execute('SELECT COUNT(*) FROM location')
                     self.assertListEqual(result.fetchall(), [(2,)])
 
+    def test_select_all(self):
+        """Select all rows from location table."""
+        filename = os.path.join(self.directory, 'location.db')
+        with closing(sqlite3.connect(filename)) as connection:
+            with closing(connection.cursor()) as cursor:
+                cursor.execute(
+                    'CREATE TABLE location (name TEXT)')
+                cursor.execute(
+                    'INSERT INTO location VALUES ("Hello world!")')
+            connection.commit()
+
+        with patch('pic2map.db.BaseDirectory') as BaseDirectory:
+            BaseDirectory.save_data_path.return_value = self.directory
+            with LocationDB() as location_db:
+                result = location_db.select_all()
+                rows = result.fetchall()
+                self.assertEqual(len(rows), 1)
+                row = rows[0]
+                self.assertSequenceEqual(row, (u'Hello world!',))
+
+
+
 
 class TransformMetadataToRowTest(unittest.TestCase):
 
