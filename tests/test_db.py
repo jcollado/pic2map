@@ -107,8 +107,8 @@ class LocationDBTest(unittest.TestCase):
                 cursor.execute(
                     'CREATE TABLE location (column_1 TEXT, column_2 TEXT)')
 
-        with patch('pic2map.db.BaseDirectory') as BaseDirectory:
-            BaseDirectory.save_data_path.return_value = (
+        with patch('pic2map.db.BaseDirectory') as base_directory:
+            base_directory.save_data_path.return_value = (
                 os.path.dirname(filename))
             location_db = LocationDB()
             self.assertListEqual(
@@ -118,8 +118,8 @@ class LocationDBTest(unittest.TestCase):
 
     def test_create_database(self):
         """Create database file."""
-        with patch('pic2map.db.BaseDirectory') as BaseDirectory:
-            BaseDirectory.save_data_path.return_value = self.directory
+        with patch('pic2map.db.BaseDirectory') as base_directory:
+            base_directory.save_data_path.return_value = self.directory
             LocationDB()
             filename = os.path.join(self.directory, 'location.db')
             self.assertTrue(os.path.isfile(filename))
@@ -140,8 +140,8 @@ class LocationDBTest(unittest.TestCase):
                 'datetime': datetime(2015, 1, 1, 12, 34, 56)
             },
         ]
-        with patch('pic2map.db.BaseDirectory') as BaseDirectory:
-            BaseDirectory.save_data_path.return_value = self.directory
+        with patch('pic2map.db.BaseDirectory') as base_directory:
+            base_directory.save_data_path.return_value = self.directory
             with LocationDB() as location_db:
                 location_db.insert(rows)
 
@@ -162,8 +162,8 @@ class LocationDBTest(unittest.TestCase):
                     'INSERT INTO location VALUES ("Hello world!")')
             connection.commit()
 
-        with patch('pic2map.db.BaseDirectory') as BaseDirectory:
-            BaseDirectory.save_data_path.return_value = self.directory
+        with patch('pic2map.db.BaseDirectory') as base_directory:
+            base_directory.save_data_path.return_value = self.directory
             with LocationDB() as location_db:
                 result = location_db.select_all()
                 rows = result.fetchall()
@@ -188,8 +188,8 @@ class LocationDBTest(unittest.TestCase):
                             .format(directory, index))
             connection.commit()
 
-        with patch('pic2map.db.BaseDirectory') as BaseDirectory:
-            BaseDirectory.save_data_path.return_value = self.directory
+        with patch('pic2map.db.BaseDirectory') as base_directory:
+            base_directory.save_data_path.return_value = self.directory
             with LocationDB() as location_db:
                 result = location_db.delete('a')
                 self.assertEqual(result.rowcount, file_count)
@@ -209,8 +209,8 @@ class LocationDBTest(unittest.TestCase):
                         'INSERT INTO location VALUES ("{}.jpg")'.format(index))
             connection.commit()
 
-        with patch('pic2map.db.BaseDirectory') as BaseDirectory:
-            BaseDirectory.save_data_path.return_value = self.directory
+        with patch('pic2map.db.BaseDirectory') as base_directory:
+            base_directory.save_data_path.return_value = self.directory
             with LocationDB() as location_db:
                 result = location_db.count()
                 self.assertEqual(result, file_count)
