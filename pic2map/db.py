@@ -105,7 +105,7 @@ class LocationDB(Database):
             self.location_table = Table(
                 'location',
                 self.metadata,
-                Column('filename', String),
+                Column('filename', String, unique=True),
                 Column('latitude', Float),
                 Column('longitude', Float),
                 Column('datetime', DateTime),
