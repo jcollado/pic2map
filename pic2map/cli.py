@@ -46,6 +46,14 @@ def add(args):
             database.insert(location_rows)
 
 
+def remove(args):
+    """Remove location information for pictures under directory."""
+    logger.info('Removing image files from %r...', args.directory)
+
+    with LocationDB() as database:
+        database.delete(args.directory)
+
+
 def serve(_args):
     """Run web server."""
     app.run(debug=True)
@@ -108,6 +116,11 @@ def parse_arguments(argv):
     add_parser.add_argument(
         'directory', type=valid_directory, help='Base directory')
     add_parser.set_defaults(func=add)
+
+    remove_parser = subparsers.add_parser('remove', help=remove.__doc__)
+    remove_parser.add_argument(
+        'directory', type=valid_directory, help='Base directory')
+    remove_parser.set_defaults(func=remove)
 
     serve_parser = subparsers.add_parser('serve', help=serve.__doc__)
     serve_parser.set_defaults(func=serve)
