@@ -26,7 +26,7 @@ def main(argv):
 
 
 def add(args):
-    """Add pictures metadata from directory to location database."""
+    """Add location information for pictures under directory."""
     logger.info('Adding image files from %r...', args.directory)
     tree_explorer = TreeExplorer(args.directory)
     paths = tree_explorer.paths()
