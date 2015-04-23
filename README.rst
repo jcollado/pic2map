@@ -20,12 +20,35 @@ Pic2Map
     :target: https://coveralls.io/r/jcollado/pic2map
 
 
-Display pictures location in a map
+Pic2Map is tool to gather GPS metadata from picture files and display it in a map.
 
 * Free software: MIT license
 * Documentation: https://pic2map.readthedocs.org.
 
+
 Features
 --------
 
-* TODO
+* Add location information for pictures under directory to database
+
+.. code-block:: bash
+
+    pic2map add <directory>
+
+* Remove location information for pictures under directory from database
+
+.. code-block:: bash
+
+    pic2map remove <directory>
+
+* Count how many files have been indexed
+
+.. code-block:: bash
+
+    pic2map count
+
+* Launch web server to display map and a marker for each picture
+
+.. code-block:: bash
+
+    pic2map serve
