@@ -10,6 +10,7 @@ from sqlalchemy import (
     MetaData,
     Table,
     create_engine,
+    select,
 )
 from sqlalchemy.types import (
     DateTime,
@@ -118,6 +119,17 @@ class LocationDB(Database):
         """
         insert_query = self.location_table.insert()
         self.connection.execute(insert_query, rows)
+
+    def select_all(self):
+        """Get all rows from the location table.
+
+        :returns: Location information rows
+        :rtype: sqlalchemy.engine.result.ResultProxy
+
+        """
+        select_query = select([self.location_table])
+        result = self.connection.execute(select_query)
+        return result
 
 
 def transform_metadata_to_row(metadata):
