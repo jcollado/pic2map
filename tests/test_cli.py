@@ -72,6 +72,15 @@ class CommandFunctionTests(unittest.TestCase):
         self.location_db_patcher = patch('pic2map.cli.LocationDB')
         self.location_cls = self.location_db_patcher.start()
 
+
+    def tearDown(self):
+        """Undo the patching."""
+        self.tree_explorer_patcher.stop()
+        self.filter_gps_metadata_patcher.stop()
+        self.transform_metadata_to_row_patcher.stop()
+        self.location_db_patcher.stop()
+
+
     def test_add(self):
         """Add command function."""
         tree_explorer = self.tree_explorer_cls()
@@ -98,10 +107,6 @@ class CommandFunctionTests(unittest.TestCase):
         with patch('pic2map.cli.app') as app:
             serve(args)
             app.run.assert_called_once_with(debug=True)
-
-    def tearDown(self):
-        """Undo the patching."""
-        self.tree_explorer_patcher.stop()
 
 
 class ValidDirectoryTest(unittest.TestCase):
