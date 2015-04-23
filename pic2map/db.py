@@ -39,6 +39,7 @@ class Database(object):
         self.db_filename = db_filename
         self.engine = create_engine(
             'sqlite:///{}'.format(db_filename),
+            connect_args={'check_same_thread': False},
         )
         self.connection = None
         self.metadata = MetaData(bind=self.engine)
