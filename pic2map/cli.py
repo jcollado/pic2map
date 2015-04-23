@@ -115,7 +115,7 @@ def parse_arguments(argv):
         '-l', '--log-level',
         dest='log_level',
         choices=log_levels,
-        default='warning',
+        default='info',
         help=('Log level. One of {0} or {1} '
               '(%(default)s by default)'
               .format(', '.join(log_levels[:-1]), log_levels[-1])))
