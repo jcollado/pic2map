@@ -147,6 +147,7 @@ class LocationDB(Database):
         )
         result = self.connection.execute(delete_query)
         logger.debug('%d rows deleted', result.rowcount)
+        return result
 
     def count(self):
         """Get number of rows in the database.

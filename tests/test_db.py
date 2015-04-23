@@ -171,6 +171,28 @@ class LocationDBTest(unittest.TestCase):
                 row = rows[0]
                 self.assertSequenceEqual(row, (u'Hello world!',))
 
+    def test_remove(self):
+        """Delete rows for files under a given directory."""
+        file_count = 10
+
+        filename = os.path.join(self.directory, 'location.db')
+        with closing(sqlite3.connect(filename)) as connection:
+            with closing(connection.cursor()) as cursor:
+                cursor.execute(
+                    'CREATE TABLE location (filename TEXT)')
+
+                for directory in ['a', 'b']:
+                    for index in range(file_count):
+                        cursor.execute(
+                            'INSERT INTO location VALUES ("{}/{}.jpg")'
+                            .format(directory, index))
+            connection.commit()
+
+        with patch('pic2map.db.BaseDirectory') as BaseDirectory:
+            BaseDirectory.save_data_path.return_value = self.directory
+            with LocationDB() as location_db:
+                result = location_db.delete('a')
+                self.assertEqual(result.rowcount, file_count)
 
 
 
