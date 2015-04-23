@@ -56,7 +56,7 @@ class CommandFunctionTests(unittest.TestCase):
     """Command function test cases."""
 
     def setUp(self):
-        """Patch elasticsearch client."""
+        """Patch dependencies."""
         self.tree_explorer_patcher = patch('pic2map.cli.TreeExplorer')
         self.tree_explorer_cls = self.tree_explorer_patcher.start()
 
