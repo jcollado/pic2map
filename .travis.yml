@@ -8,18 +8,13 @@ python:
 before_install:
   - sudo apt-get update -qq
   - sudo apt-get install libimage-exiftool-perl
-  - pip install codecov
 
 install:
-  - pip install -r requirements.txt
-
-before_script:
-  - pip install -r test_requirements.txt
-  - pip install coveralls
+  - pip install -r requirements.txt -r test_requirements.txt codecov coveralls
 
 script:
   - coverage run --source pic2map setup.py test
 
 after_success:
-  - coveralls
   - codecov
+  - coveralls
