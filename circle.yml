@@ -1,0 +1,7 @@
+dependencies:
+    pre:
+        - sudo apt-get update -qq
+        - sudo apt-get install libimage-exiftool-perl
+
+    post:
+        - pip install -r test_requirements.txt
