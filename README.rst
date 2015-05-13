@@ -23,8 +23,8 @@ Pic2Map
 .. image:: https://coveralls.io/repos/jcollado/pic2map/badge.svg
     :target: https://coveralls.io/r/jcollado/pic2map
 
-.. image:: https://badge.waffle.io/jcollado/esis.svg?label=ready&title=Ready
-    :target: https://waffle.io/jcollado/esis
+.. image:: https://badge.waffle.io/jcollado/pic2map.svg?label=ready&title=Ready
+    :target: https://waffle.io/jcollado/pic2map
     :alt: 'Stories in Ready'
 
 .. image:: https://badges.gitter.im/Join%20Chat.svg
