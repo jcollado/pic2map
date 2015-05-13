@@ -2,10 +2,6 @@
 Pic2Map
 ===============================
 
-.. image:: https://badges.gitter.im/Join%20Chat.svg
-   :alt: Join the chat at https://gitter.im/jcollado/pic2map
-   :target: https://gitter.im/jcollado/pic2map?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge
-
 .. image:: https://img.shields.io/pypi/v/pic2map.svg
     :target: https://pypi.python.org/pypi/pic2map
 
@@ -22,6 +18,10 @@ Pic2Map
 
 .. image:: https://coveralls.io/repos/jcollado/pic2map/badge.svg
     :target: https://coveralls.io/r/jcollado/pic2map
+
+.. image:: https://badges.gitter.im/Join%20Chat.svg
+   :alt: Join the chat at https://gitter.im/jcollado/pic2map
+   :target: https://gitter.im/jcollado/pic2map?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge
 
 
 Pic2Map is tool to gather GPS metadata from picture files and display it in a map.
