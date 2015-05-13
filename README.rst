@@ -9,6 +9,10 @@ Pic2Map
     :target: https://readthedocs.org/projects/pic2map/?badge=latest
     :alt: Documentation Status
 
+.. image:: https://requires.io/github/jcollado/pic2map/requirements.svg?branch=master
+    :target: https://requires.io/github/jcollado/pic2map/requirements/?branch=master
+    :alt: Requirements Status
+
 .. image:: https://landscape.io/github/jcollado/pic2map/master/landscape.svg?style=flat
     :target: https://landscape.io/github/jcollado/pic2map/master
     :alt: Code Health
