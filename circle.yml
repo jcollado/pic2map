@@ -5,3 +5,7 @@ dependencies:
 test:
     override:
         - python setup.py test
+
+notify:
+  webhooks:
+    - url: https://webhooks.gitter.im/e/0fbaad3c2fa93009d2b4
