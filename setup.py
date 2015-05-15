@@ -32,6 +32,7 @@ requirements = [
 test_requirements = [
     'coverage',
     'mock',
+    'nose',
     'pillow',
 ]
 
