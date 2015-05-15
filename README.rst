@@ -38,9 +38,6 @@ Pic2Map
 
 Pic2Map is tool to gather GPS metadata from picture files and display it in a map.
 
-* Free software: MIT license
-* Documentation: https://pic2map.readthedocs.org.
-
 
 Features
 --------
