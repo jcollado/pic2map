@@ -2,6 +2,10 @@
 Pic2Map
 ===============================
 
+.. image:: https://pypip.in/license/pic2map/badge.svg
+    :target: https://pypi.python.org/pypi/pic2map/
+    :alt: License
+
 .. image:: https://img.shields.io/pypi/v/pic2map.svg
     :target: https://pypi.python.org/pypi/pic2map
 
