@@ -7,6 +7,11 @@ try:
 except ImportError:
     from distutils.core import setup
 
+from pic2map import (
+    __author__ as author,
+    __email__ as author_email,
+    __version__ as version,
+)
 
 with open('README.rst') as readme_file:
     readme = readme_file.read()
@@ -32,11 +37,11 @@ test_requirements = [
 
 setup(
     name='pic2map',
-    version='0.1.0',
+    version=version,
     description="Display pictures location in a map",
     long_description=readme + '\n\n' + history,
-    author="Javier Collado",
-    author_email='jcollado@nowsecure.com',
+    author=author,
+    author_email=author_email,
     url='https://github.com/jcollado/pic2map',
     packages=[
         'pic2map',
