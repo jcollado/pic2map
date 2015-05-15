@@ -10,8 +10,8 @@ Pic2Map
     :target: https://pypi.python.org/pypi/pic2map
 
 .. image:: https://readthedocs.org/projects/pic2map/badge/?version=latest
-    :target: https://readthedocs.org/projects/pic2map/?badge=latest
-    :alt: Documentation Status
+    :target: http://pic2map.readthedocs.org/en/latest/
+    :alt: Documentation
 
 .. image:: https://requires.io/github/jcollado/pic2map/requirements.svg?branch=master
     :target: https://requires.io/github/jcollado/pic2map/requirements/?branch=master
