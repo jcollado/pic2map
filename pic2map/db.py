@@ -161,6 +161,7 @@ class LocationDB(Database):
         result = self.connection.execute(select_query)
         return result.scalar()
 
+
 def transform_metadata_to_row(metadata):
     """Transform GPS metadata in database rows.
 
