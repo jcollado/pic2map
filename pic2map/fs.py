@@ -50,7 +50,7 @@ class TreeExplorer(object):
 
             # Check if any filename is a picture file
             for filename in filenames:
-                path = os.path.join(dirpath, filename)
+                path = os.path.join(dirpath, filename).decode('utf8')
 
                 # Skip missing files like broken symbolic links
                 if not os.path.isfile(path):
