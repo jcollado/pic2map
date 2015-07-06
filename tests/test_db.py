@@ -267,6 +267,7 @@ class TransformMetadataToRowTest(unittest.TestCase):
             'filename': 'a.jpg',
             'latitude': 1.2,
             'longitude': 2.1,
+            'datetime': None,
         }
 
         row = transform_metadata_to_row(metadata)
