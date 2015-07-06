@@ -5,6 +5,8 @@ import shutil
 import tempfile
 import unittest
 
+from mock import patch
+
 from PIL import Image
 
 from pic2map.fs import TreeExplorer
@@ -112,7 +114,9 @@ class TreeExplorerTest(unittest.TestCase):
         self.create_directory(self.directory, metadata)
 
         tree_explorer = TreeExplorer(self.directory)
+        with patch('pic2map.fs.logger'):
+            paths = tree_explorer.paths()
         self.assertListEqual(
-            sorted(tree_explorer.paths()),
+            sorted(paths),
             sorted(self.picture_filenames),
         )
