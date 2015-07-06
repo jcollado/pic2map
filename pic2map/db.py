@@ -193,5 +193,7 @@ def transform_metadata_to_row(metadata):
             datetime_str,
             ['YYYY:MM:DD HH:mm:ss.SSS', 'YYYY:MM:DD HH:mm:ss'],
         ).datetime
+    else:
+        new_metadata['datetime'] = None
 
     return new_metadata
