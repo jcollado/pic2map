@@ -49,3 +49,12 @@ class RowToSerializableTest(unittest.TestCase):
             new_row,
             {'datetime': '2015/01/01 12:34:56'},
         )
+
+    def test_datetime(self):
+        """None datetime is not converted to a string."""
+        row = {'datetime': None}
+        new_row = row_to_serializable(row)
+        self.assertDictEqual(
+            new_row,
+            row,
+        )
