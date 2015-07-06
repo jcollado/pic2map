@@ -39,7 +39,8 @@ def row_to_serializable(row):
 
     """
     row = dict(row)
-    row['datetime'] = row['datetime'].strftime(DATE_EXCHANGE_FORMAT)
+    if row['datetime']:
+        row['datetime'] = row['datetime'].strftime(DATE_EXCHANGE_FORMAT)
     return row
 
 
