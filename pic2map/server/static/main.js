@@ -8,10 +8,10 @@ L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png', {
 console.log('Adding markers for ' + rows.length + ' rows');
 rows.forEach(function(row) {
     var coordinates = [row.latitude, row.longitude];
-    L.marker(coordinates).addTo(map)
-        .bindPopup(
-            'Filename: ' + row.filename + '<br>' +
-            'GPS datetime: ' + row.datetime
-        )
-    ;
+    var text = 'Filename: ' + row.filename;
+    if (row.datetime) {
+      text += '<br>GPS datetime: ' + row.datetime;
+    }
+
+    L.marker(coordinates).addTo(map).bindPopup(text);
 });
