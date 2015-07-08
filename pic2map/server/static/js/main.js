@@ -1,9 +1,9 @@
 // Avoid jslint errors for known globals
 /*global L*/
 var LocationMap = {
-  'initialize': function initialize() {
+  'initialize': function initialize(elementId) {
     // Map centered in NowSecure HQ by default
-    this.map = L.map('map').setView([40.2001925,-89.0876265], 3);
+    this.map = L.map(elementId).setView([40.2001925,-89.0876265], 3);
     this.markerCluster = L.markerClusterGroup();
 
     L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png', {
