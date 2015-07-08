@@ -12,9 +12,11 @@
     <div id="map"></div>
     <script src="{{ url_for('static', filename='js/leaflet.js') }}"></script>
     <script src="{{ url_for('static', filename='js/leaflet.markercluster.js') }}"></script>
-    <script type="text/javascript">
-        var rows = {{ rows | safe }};
-    </script>
     <script type="text/javascript" src="{{ url_for('static', filename='js/main.js') }}"></script>
+    <script type="text/javascript">
+        var map = Object.create(LocationMap);
+        map.initialize();
+        map.addMarkers({{ rows | safe }});
+    </script>
   </body>
 </html>
