@@ -5,10 +5,14 @@
     <title>Picture location</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='main.css') }}"/>
     <link rel="stylesheet" href="{{ url_for('static', filename='leaflet.css') }}"/>
+    <link rel="stylesheet" href="{{ url_for('static', filename='leaflet.css') }}"/>
+    <link rel="stylesheet" href="{{ url_for('static', filename='MarkerCluster.css') }}"/>
+    <link rel="stylesheet" href="{{ url_for('static', filename='MarkerCluster.Default.css') }}"/>
   </head>
   <body>
     <div id="map"></div>
     <script src="{{ url_for('static', filename='leaflet.js') }}"></script>
+    <script src="{{ url_for('static', filename='leaflet.markercluster.js') }}"></script>
     <script type="text/javascript">
         var rows = {{ rows | safe }};
     </script>
