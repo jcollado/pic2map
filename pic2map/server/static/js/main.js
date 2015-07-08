@@ -1,3 +1,5 @@
+// Avoid jslint errors for known globals
+/*global L*/
 var LocationMap = {
   'initialize': function initialize() {
     // Map centered in NowSecure HQ by default
