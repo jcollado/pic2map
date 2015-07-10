@@ -27,14 +27,26 @@ class RouteTest(unittest.TestCase):
                 row_to_serializable_patcher as row_to_serializable_mock:
             location_db = location_db_cls().__enter__()
             rows = [
-                {'datetime': datetime(2015, 1, 1, 12, 34, 56)},
+                {
+                    'latitude': 0.0,
+                    'longitude': 0.0,
+                    'datetime': datetime(2015, 1, 1, 12, 34, 56),
+                },
             ]
             location_db.select_all.return_value = rows
-            new_row = {'datetime': 'some datetime'}
+            new_row = {
+                'latitude': 0.0,
+                'longitude': 0.0,
+                'datetime': 'some datetime',
+            }
             row_to_serializable_mock.return_value = new_row
             index()
             render_template.assert_called_once_with(
-                'index.html', rows=json.dumps([new_row]))
+                'index.html',
+                centroid=json.dumps(
+                    [new_row['latitude'], new_row['longitude']]),
+                rows=json.dumps([new_row]),
+            )
 
 
 class RowToSerializableTest(unittest.TestCase):

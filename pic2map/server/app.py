@@ -3,12 +3,15 @@
 
 import json
 
+from operator import itemgetter
+
 from flask import (
     Flask,
     render_template,
 )
 
 from pic2map.db import LocationDB
+from pic2map.util import average
 
 # Note: python and javascript don't seem to agree on what %c, %x
 # and %X are, so it's better to be explicit in the time formatting
@@ -21,10 +24,14 @@ app = Flask(__name__)
 def index():
     """Application main page."""
     with LocationDB() as location_db:
-        result = location_db.select_all()
-        rows = json.dumps([row_to_serializable(row) for row in result])
+        db_rows = list(location_db.select_all())
+        centroid = json.dumps([
+            average(db_rows, itemgetter('latitude')),
+            average(db_rows, itemgetter('longitude')),
+        ])
+        rows = json.dumps([row_to_serializable(db_row) for db_row in db_rows])
 
-    return render_template('index.html', rows=rows)
+    return render_template('index.html', centroid=centroid, rows=rows)
 
 
 def row_to_serializable(row):
