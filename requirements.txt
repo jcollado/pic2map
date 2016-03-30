@@ -4,5 +4,5 @@ git+https://github.com/smarnach/pyexiftool.git#egg=PyExifTool==0.1
 arrow==0.7.0
 python-magic==0.4.11
 pyxdg==0.25
-voluptuous==0.8.9
+voluptuous==0.8.10
 wheel==0.29.0
