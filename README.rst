@@ -35,6 +35,10 @@ Pic2Map
    :alt: Join the chat at https://gitter.im/jcollado/pic2map
    :target: https://gitter.im/jcollado/pic2map?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge
 
+.. image:: http://unmaintained.tech/badge.svg
+   :alt: No Maintenance Intended
+   :target: http://unmaintained.tech/
+
 
 Pic2Map is tool to gather GPS metadata from picture files and display it in a map.
 
