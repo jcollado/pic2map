@@ -5,4 +5,4 @@ arrow==0.7.0
 python-magic==0.4.11
 pyxdg==0.25
 voluptuous==0.8.11
-wheel==0.29.0
+wheel==0.38.1
